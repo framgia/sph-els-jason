@@ -23,7 +23,9 @@ Make sure to create a MySQL Database based on the DB_DATABASE value = `elearning
 After cloning the project
 Go to project directory
 
-cd sun
+```
+  cd sun
+```
 
 ## Commands for running the Front End
 
@@ -42,7 +44,7 @@ Start the Front End server
   composer install
 ```
 
-### Start the Back End Server
+## Start the Back End Server
 
 ```
  php artisan serve
