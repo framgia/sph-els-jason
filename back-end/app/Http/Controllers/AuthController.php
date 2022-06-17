@@ -9,10 +9,18 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    //
+
+    private function verifyUserCredentials($creds)
+    {
+        if (!Auth::attempt($creds) || !Auth::attempt($request->only('email', 'password'))) {
+            return response()->json([
+                'message' => 'Login information is invalid'
+            ], 401);
+        }
+    }
+
     public function register(Request $request)
     {
-        // for validation
         $public_data = $request->validate([
             'first_name' => 'required|string',
             'last_name' => 'required|string',
@@ -40,18 +48,8 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
-        if (!Auth::attempt($credentials)) {
-            //Authentication did not pass...
-            return response()->json([
-                'message' => 'Login information is invalid.'
-            ], 401);
-        }
 
-        if (!Auth::attempt($request->only('email', 'password'))) {
-            return response()->json([
-                'message' => 'Login information is invalid.'
-            ], 401);
-        }
+        $this->verifyUserCredentials($credentials);
 
         $user = User::where('email', $request['email'])->firstOrFail();
         $token = $user->createToken('authToken')->plainTextToken;
