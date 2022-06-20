@@ -12,7 +12,7 @@ class AuthController extends Controller
 
     private function verifyUserCredentials($creds)
     {
-        if (!Auth::attempt($creds) || !Auth::attempt($request->only('email', 'password'))) {
+        if (!Auth::attempt($creds)) {
             return response()->json([
                 'message' => 'Login information is invalid'
             ], 401);
@@ -41,7 +41,8 @@ class AuthController extends Controller
         return response()->json([
             'status' => 'Success',
             'message' => 'Successfully registered',
-            'token' => $token
+            'token' => $token,
+            'token_type' => 'Bearer',
         ]);
     }
 
@@ -52,11 +53,26 @@ class AuthController extends Controller
         $this->verifyUserCredentials($credentials);
 
         $user = User::where('email', $request['email'])->firstOrFail();
+
         $token = $user->createToken('authToken')->plainTextToken;
 
         return response()->json([
-            'access_token' => $token,
+            'token' => $token,
             'token_type' => 'Bearer',
+        ]);
+    }
+
+    public function me(Request $request)
+    {
+        return $request->user();
+    }
+
+    public function logout()
+    {
+        auth()->user()->tokens()->delete();
+
+        return response()->json([
+            'message' => 'User logged out'
         ]);
     }
 }

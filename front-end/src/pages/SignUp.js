@@ -23,7 +23,7 @@ const SignUp = () => {
     e.preventDefault();
     setErrors(validation(formValues));
 
-    let res = await instance.post("auth/register", formValues);
+    let res = await instance.post("register", formValues);
 
     if (res.request.status === 200) {
       setFormValues(initialState);
