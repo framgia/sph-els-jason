@@ -2,11 +2,11 @@ const validation = (formValues) => {
   let errors = {};
   const regex = /\S+@\S+\.\S+/;
 
-  if (!formValues.firstName) {
-    errors.firstName = "First name is required.";
+  if (!formValues.first_name) {
+    errors.first_name = "First name is required.";
   }
-  if (!formValues.lastName) {
-    errors.lastName = "Last name is required.";
+  if (!formValues.last_name) {
+    errors.last_name = "Last name is required.";
   }
   if (!formValues.email) {
     errors.email = "Email is required.";

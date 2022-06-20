@@ -1,12 +1,16 @@
 import React, { useState } from "react";
+import { instance } from "../components/Axios";
 import validation from "../utils/validation";
 
 const SignUp = () => {
-  const [formValues, setFormValues] = useState({
-    firstName: "",
-    lastName: "",
+  const initialState = {
+    first_name: "",
+    last_name: "",
     email: "",
     password: "",
+  };
+  const [formValues, setFormValues] = useState({
+    initialState,
   });
 
   const [errors, setErrors] = useState({});
@@ -15,9 +19,15 @@ const SignUp = () => {
     setFormValues({ ...formValues, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors(validation(formValues));
+
+    let res = await instance.post("auth/register", formValues);
+
+    if (res.request.status === 200) {
+      setFormValues(initialState);
+    }
   };
 
   return (
@@ -26,30 +36,32 @@ const SignUp = () => {
         <h1>Registration Form</h1>
         <hr></hr>
         <div className="form-group">
-          <label for="firstName">First Name</label>
+          <label for="first-name">First Name</label>
           <input
             type="text"
-            name="firstName"
-            id="firstName"
+            name="first_name"
+            id="first-name"
             className="form-control mb-2"
-            value={formValues.firstName}
+            value={formValues.first_name}
             onChange={handleChange}
           />
-          {errors.firstName && (
-            <p className="text-danger">{errors.firstName}</p>
+          {errors.first_name && (
+            <p className="text-danger">{errors.first_name}</p>
           )}
         </div>
         <div className="form-group">
-          <label for="lastName">Last Name</label>
+          <label for="last-name">Last Name</label>
           <input
             type="text"
-            name="lastName"
-            id="lastName"
+            name="last_name"
+            id="last-name"
             className="form-control mb-2"
-            value={formValues.lastName}
+            value={formValues.last_name}
             onChange={handleChange}
           />
-          {errors.lastName && <p className="text-danger">{errors.lastName}</p>}
+          {errors.last_name && (
+            <p className="text-danger">{errors.last_name}</p>
+          )}
         </div>
         <div className="form-group">
           <label for="email">Email address</label>
