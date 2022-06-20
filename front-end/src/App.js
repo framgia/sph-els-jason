@@ -1,10 +1,15 @@
 import React from "react";
-import SignUp from "./pages/SignUp";
+import { BrowserRouter as Router } from "react-router-dom";
+
+import Navbar from "./components/NavBar";
+import RouteList from "./routes/RouteList";
+
 const App = () => {
   return (
-    <div className="container w-50 mt-5">
-      <SignUp></SignUp>
-    </div>
+    <Router>
+      <Navbar />
+      <RouteList></RouteList>
+    </Router>
   );
 };
 
